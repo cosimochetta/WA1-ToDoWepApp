@@ -1,5 +1,6 @@
 import React from 'react';
 import {Navbar} from "./navbar.js"
+import {PageContent} from "./pageContent.js"
 
 /*
 const fakeExams = [
@@ -15,6 +16,7 @@ class App extends React.Component {
     render() {
         return <div className="App">
             <Navbar></Navbar>
+            <PageContent></PageContent>
         </div>
         
     }
