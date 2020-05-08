@@ -27,14 +27,14 @@ class Sidebar extends React.Component {
             <div class="list-group list-group-flush">
                 {filter_list.map((filter, index) => (<Filter key={index} index={index} filter={filter} data_id={filter_data_id[index]}
                     selected={this.state.active_type.localeCompare("filter") === 0 && this.state.active_id === index} 
-                    setActiveId={this.setActiveId} setActiveType={this.setActiveType}/>))}
+                    setActiveId={this.setActiveId} setActiveType={this.setActiveType} setFilter={this.props.setFilter}/>))}
             </div>
             <div class="my-5">
                 <h6 class="border-bottom border-gray p-3 mb-0">Projects</h6>
                 <div class="list-group list-group-flush">
                     {this.state.projects.map((project, index) => (<ProjectFilter key={index} index={index} projectFilter={project}
                         selected={this.state.active_type.localeCompare("project") === 0 && this.state.active_id === index} 
-                        setActiveId={this.setActiveId} setActiveType={this.setActiveType}/>))}
+                        setActiveId={this.setActiveId} setActiveType={this.setActiveType} setFilter={this.props.setFilter}/>))}
                 </div>
             </div>
         </aside>
@@ -45,11 +45,11 @@ function Filter(props) {
     
     if (props.selected) {
         return <a href="#top" class="list-group-item list-group-item-action active" data-id={props.data_id}
-        onClick={()=>{props.setActiveId(props.index); props.setActiveType("filter")}}>{props.filter}</a>
+        onClick={()=>{props.setActiveId(props.index); props.setActiveType("filter"); props.setFilter(props.filter)}}>{props.filter}</a>
     }
     else {
         return <a href="#top" class="list-group-item list-group-item-action" data-id={props.data_id}
-        onClick={()=>{props.setActiveId(props.index); props.setActiveType("filter")}}>{props.filter}</a>
+        onClick={()=>{props.setActiveId(props.index); props.setActiveType("filter"); props.setFilter(props.filter)}}>{props.filter}</a>
     }
 
 }

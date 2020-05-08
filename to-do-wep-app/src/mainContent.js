@@ -13,77 +13,82 @@ const delete_icon = <svg class="bi bi-trash m-1" width="1.2em" height="1.2em" vi
 </svg>
 
 const shared_icon = <svg class="bi bi-person-square" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" d="M14 1H2a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V2a1 1 0 00-1-1zM2 0a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V2a2 2 0 00-2-2H2z" clip-rule="evenodd"></path>
-<path fill-rule="evenodd" d="M2 15v-1c0-1 1-4 6-4s6 3 6 4v1H2zm6-6a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path>
+	<path fill-rule="evenodd" d="M14 1H2a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V2a1 1 0 00-1-1zM2 0a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V2a2 2 0 00-2-2H2z" clip-rule="evenodd"></path>
+	<path fill-rule="evenodd" d="M2 15v-1c0-1 1-4 6-4s6 3 6 4v1H2zm6-6a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path>
 </svg>;
+
 class MainContent extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.state = { taskList: [...props.taskList] };
+		this.state = {
+			taskList: [...props.taskList],
+			filter: props.filter
+		};
 	}
 
 	render() {
 		return <main class="col-sm-9 col-12 below-nav" >
-			<h1>All</h1>
-			<ul class="list-group list-group-flush">
-				{this.state.taskList.map( (task) => (<TaskElement key={task.index} task={task} />))}
-			</ul>
+			<h1 class="bg-primary text-white d-inline-block px-2 rounded-top">{this.state.filter}</h1>
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col">Description</th>
+						<th scope="col">Project</th>
+						<th scope="col">Dhared</th>
+						<th scope="col">Deadline</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				<tbody>
+					{this.state.taskList.map((task) => (<TaskElement key={task.index} task={task} />))}
+				</tbody>
+			</table>
 			<button type="button" class="btn btn-lg btn-primary fixed-right-bottom">&#43;</button>
 		</main>
 	}
 }
 
 function TaskElement(props) {
-	return <li id={"task"+props.task.id} class="list-group-item">
-		<div class="d-flex w-100 justify-content-between">
-			<TaskElementItem key={props.task.index} task={props.task}></TaskElementItem>
-		</div>
-	</li>
+	return <tr id={"task" + props.task.id} class="w-100">
+		<TaskElementItem key={props.task.index} task={props.task}></TaskElementItem>
+	</tr>
 }
 
 function TaskElementItem(props) {
 	return <>
-		<div class="custom-control custom-checkbox">
-			<Checkbox id={props.task.id} important={props.task.important}></Checkbox>
-			<label class="description custom-control-label" htmlFor={"check-t" + props.task.id}>{props.task.description}</label>
-			<span class="project badge badge-primary ml-4">{props.task.project}</span>
-			
-		</div>
-		<Private privateTask={props.task.privateTask}></Private>
-		<Deadline deadline={props.task.deadline}></Deadline>
-		<div>
+		<th scope="row">
+			<div class="custom-control custom-checkbox">
+				<Checkbox id={props.task.id} important={props.task.important}></Checkbox>
+				<label class="description custom-control-label" htmlFor={"check-t" + props.task.id}>{props.task.description}</label>
+			</div>
+		</th>
+		<td><div class="badge badge-pill badge-primary align-middle">{props.task.project || null}</div></td>
+		<td>{props.task.privateTask ? null : shared_icon}</td>
+		<td><Deadline deadline={props.task.deadline}></Deadline></td>
+		<td>
 			{update_icon}
 			{delete_icon}
-		</div>
+		</td>
 	</>
 }
 
-function Checkbox(props){
-	if(props.important){
+function Checkbox(props) {
+	if (props.important) {
 		return <input type="checkbox" id={"check-t" + props.id} class="custom-control-input important" htmlFor={"check-t" + props.id}></input>
-	}else{
+	} else {
 		return <input type="checkbox" id={"check-t" + props.id} class="custom-control-input" htmlFor={"check-t" + props.id}></input>
 	}
 }
 
-function Private(props){
-	if(props.privateTask){
-		return null;
+function Deadline(props) {
+	if (props.deadline.isBefore(moment())) {
+		return <small class="mx-auto date bg-danger text-white">{props.deadline.format("YYYY/MM/DD")}</small>
 	}
 	else {
-		return shared_icon;
+		return <small class="mx-auto date">{props.deadline.format("YYYY/MM/DD")}</small>
 	}
-}
 
-function Deadline(props){
-	if(props.deadline.isBefore(moment())){
-		return <small class="date bg-danger text-white">{props.deadline.format("YYYY/MM/DD")}</small>
-	}
-	else{
-		return <small class="date">{props.deadline.format("YYYY/MM/DD")}</small>
-	}
-	
 }
 
 export { MainContent };
