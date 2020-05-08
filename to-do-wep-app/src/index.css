@@ -13,12 +13,12 @@
 }
 
 .list-group-item.active {
-    background-color: #28a745;
-    border-color: #28a745;
+    background-color: #007bff;
+    border-color: #007bff;
 }
 
 .list-group-item-action:hover {
-    background-color: #9becae;
+    background-color: #c9e0f8 ;
 }
 
 .projects-title {
@@ -60,3 +60,4 @@ input:focus:invalid {
 .img-button:hover {
     cursor: pointer; 
 }
+
