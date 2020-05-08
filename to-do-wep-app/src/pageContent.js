@@ -11,7 +11,7 @@ class PageContent extends React.Component {
 	render() {
 		return <div class="container-fluid">
 			<div class="row vheight-100">
-				<Sidebar></Sidebar>
+				<Sidebar taskList={this.state.taskList}></Sidebar>
 				<MainContent taskList={this.state.taskList}></MainContent>
 			</div>
 		</div>
