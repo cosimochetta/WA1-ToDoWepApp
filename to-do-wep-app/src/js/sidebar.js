@@ -9,7 +9,7 @@ class Sidebar extends React.Component {
         super(props);
 
         this.state = {
-            projects: [...new Set(props.taskList.map(task => task.project))],
+            projects: [...props.projects],
             active_type: "filter",
             active_id: 0
         }
@@ -23,15 +23,15 @@ class Sidebar extends React.Component {
         this.setState( {active_type: type});
     }
     render() {
-        return <aside class="collapse d-sm-block col-sm-3 col-12 bg-light below-nav" id="left-sidebar">
-            <div class="list-group list-group-flush">
+        return <aside className="collapse d-sm-block col-sm-3 col-12 bg-light below-nav" id="left-sidebar">
+            <div className="list-group list-group-flush">
                 {filter_list.map((filter, index) => (<Filter key={index} index={index} filter={filter} data_id={filter_data_id[index]}
                     selected={this.state.active_type.localeCompare("filter") === 0 && this.state.active_id === index} 
                     setActiveId={this.setActiveId} setActiveType={this.setActiveType} setFilter={this.props.setFilter}/>))}
             </div>
-            <div class="my-5">
-                <h6 class="border-bottom border-gray p-3 mb-0">Projects</h6>
-                <div class="list-group list-group-flush">
+            <div className="my-5">
+                <h6 className="border-bottom border-gray p-3 mb-0">Projects</h6>
+                <div className="list-group list-group-flush">
                     {this.state.projects.map((project, index) => (<ProjectFilter key={index} index={index} projectFilter={project}
                         selected={this.state.active_type.localeCompare("project") === 0 && this.state.active_id === index} 
                         setActiveId={this.setActiveId} setActiveType={this.setActiveType} setFilter={this.props.setFilter}/>))}
@@ -42,27 +42,13 @@ class Sidebar extends React.Component {
 }
 
 function Filter(props) {
-    
-    if (props.selected) {
-        return <a href="#top" class="list-group-item list-group-item-action active" data-id={props.data_id}
-        onClick={()=>{props.setActiveId(props.index); props.setActiveType("filter"); props.setFilter(props.filter)}}>{props.filter}</a>
-    }
-    else {
-        return <a href="#top" class="list-group-item list-group-item-action" data-id={props.data_id}
-        onClick={()=>{props.setActiveId(props.index); props.setActiveType("filter"); props.setFilter(props.filter)}}>{props.filter}</a>
-    }
-
+    return <a href="#top" className={"list-group-item list-group-item-action " + (props.selected ? "active" : "")} data-id={props.filter}
+    onClick={()=>{props.setActiveId(props.index); props.setActiveType("filter"); props.setFilter(props.filter)}}>{props.filter}</a>
 }
 
 function ProjectFilter(props) {
-    if (props.selected) {
-        return <a href="#top" class="list-group-item list-group-item-action active" data-id={props.projectFilter}
-        onClick={()=>{props.setActiveId(props.index); props.setActiveType("projct")}}>{props.projectFilter}</a>
-    }
-    else {
-        return <a href="#top" class="list-group-item list-group-item-action" data-id={props.projectFilter}
-        onClick={()=>{props.setActiveId(props.index); props.setActiveType("project")}}>{props.projectFilter}</a>
-    }
+    return <a href="#top" className={"list-group-item list-group-item-action " + (props.selected ? "active" : "")} data-id={props.projectFilter}
+    onClick={()=>{props.setActiveId(props.index); props.setActiveType("project"); props.setFilter(props.projectFilter)}}>{props.projectFilter}</a>
 }
 
 
