@@ -29,14 +29,14 @@ const TaskItem = (props) => {
 		<td><div class="badge badge-pill badge-primary align-middle">{task.project || null}</div></td>
 		<td>{task.privateTask ? null : shared_icon}</td>
 		<td>{task.deadline && (
-			<small class={"mx-auto date " + (task.deadline.isBefore(moment()) ? "bg-danger text-white" : "")}>{ task.deadline.format("YYYY/MM/DD") }</small>
+			<small class={"mx-auto date " + (task.deadline.isBefore(moment().format("YYYY-MM-DD")) ? "bg-danger text-white" : "")}>{ task.deadline.format("YYYY/MM/DD") }</small>
 			)}
 		</td>
 		<td>
 			{update_icon}
 			{delete_icon}
 		</td>
-		</tr >
+		</tr>
 }
 
 export {TaskItem};
