@@ -26,7 +26,7 @@ class MainContent extends React.Component {
 		return <main class="col-sm-9 col-12 below-nav" >
 			<h1 class="bg-primary text-white d-inline-block p-2 rounded-top">{this.state.filter}</h1>
 			<TaskList taskList={this.state.taskList}></TaskList>
-			<button type="button" class="btn btn-lg btn-primary fixed-right-bottom">&#43;</button>
+			
 		</main>
 	}
 }

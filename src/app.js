@@ -3,6 +3,7 @@ import { Navbar } from "./js/navbar.js"
 import { MainContent } from "./js/mainContent.js"
 import { Sidebar } from "./js/sidebar.js"
 import * as API from "./js/API.js"
+import { TaskForm } from './js/taskForm.js';
 
 class App extends React.Component {
 
@@ -11,7 +12,8 @@ class App extends React.Component {
 		this.state = {
 			taskList: [],
 			project: [],
-			filter: "All"
+			filter: "All",
+			showTaskForm: false
 		};
 	}
 
@@ -20,15 +22,13 @@ class App extends React.Component {
 			projects: [...new Set(taskList.map(task => task.project))]}));
 	}
 
-	getProjects() {
-		return ;
-	}
-
 	setFilter = (filterName, filterId) => {
 		API.getTasks(filterId).then((taskList) => this.setState({ taskList: [...taskList], filter: filterName }));
 	}
 
-
+	setShowTaskForm = (show) => {
+		this.setState({showTaskForm: show});
+	}
 
 	render() {
 		return <div className="App">
@@ -37,6 +37,8 @@ class App extends React.Component {
 				<div class="row vheight-100">
 					<Sidebar projects={this.state.projects} setFilter={this.setFilter}></Sidebar>
 					<MainContent taskList={this.state.taskList} filter={this.state.filter}></MainContent>
+					<button type="button" id="addButton" class="btn btn-lg btn-primary fixed-right-bottom" onClick={() => this.setShowTaskForm(true)}>&#43;</button>
+					<TaskForm showTaskForm={this.state.showTaskForm} setShowTaskForm={this.setShowTaskForm} ></TaskForm>
 				</div>
 			</div>
 		</div>
