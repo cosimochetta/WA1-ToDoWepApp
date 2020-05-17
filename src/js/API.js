@@ -1,9 +1,9 @@
 import moment from "moment"
 
-const fakeTask = [
-	{ id: 1, description: "Complete Lab 7", important: true, privateTask: true, deadline: moment('2020-05-09'), project: "WebApp I", completed: false },
-	{ id: 2, description: "Complete Lab 4", important: false, privateTask: true, deadline: moment('2020-05-11'), project: "ProgSys", completed: false },
-	{ id: 3, description: "Third delivery: testing", important: true, privateTask: false, deadline: moment('2020-05-17'), project: "Softeng", completed: false },
+let fakeTask = [
+	{ id: 1, description: "Complete Lab 8", important: true, privateTask: true, deadline: moment('2020-05-17'), project: "WebApp I", completed: false },
+	{ id: 2, description: "Complete Lab 5", important: false, privateTask: true, deadline: moment('2020-05-19'), project: "FLC", completed: false },
+	{ id: 3, description: "Third delivery: testing", important: true, privateTask: false, deadline: moment('2020-05-18'), project: "Softeng", completed: false },
 	{ id: 4, description: "I'll follow the sun", important: false, privateTask: false, deadline: moment('2020-05-15'), project: "Guitar", completed: false },
 	{ id: 5, description: "Vita spericolata", important: false, privateTask: false, deadline: moment('2020-05-15'), project: "Guitar", completed: false }
 ];
@@ -22,11 +22,10 @@ const isToday = function(date) {
 * @param {*} date a Moment js Date to be checked
 */
 const isNextWeek = function(date) {
-	const nextWeek = moment().add(1, 'weeks');
-	const tomorrow = moment().add(1, 'days');
-	return date.isAfter(tomorrow) && date.isBefore(nextWeek);
+	const nextWeek = moment().add(1, 'weeks').endOf("day");
+	const tomorrow = moment().add(1, 'days').startOf("day");
+	return date.isSameOrAfter(tomorrow) && date.isBefore(nextWeek);
 }
-
 
 async function getTasks(filter) {
 	return new Promise((resolve, reject) => {
@@ -78,4 +77,15 @@ async function getTasks(filter) {
 	});
 }
 
-export { getTasks };
+async function insertTask(task){
+	fakeTask = fakeTask.filter((el) => el.id !== task.id);
+	fakeTask.push(task);
+	return task;
+}
+
+async function deleteTask(id){
+	fakeTask = fakeTask.filter((el) => el.id !== id);
+	return true;
+}
+
+export { getTasks, insertTask, deleteTask };
