@@ -29,14 +29,23 @@ const TaskItem = (props) => {
 		<td><div class="badge badge-pill badge-primary align-middle">{task.project || null}</div></td>
 		<td>{task.privateTask ? null : shared_icon}</td>
 		<td>{task.deadline && (
-			<small class={"mx-auto date " + (task.deadline.isBefore(moment()) ? "bg-danger text-white" : "")}>{ task.deadline.format("YYYY/MM/DD") }</small>
+			<small class={"mx-auto date " + (task.deadline.isBefore(moment(), "day") ? "bg-danger text-white" : "")}>{ task.deadline.format("YYYY/MM/DD") }</small>
 			)}
 		</td>
 		<td>
-			{update_icon}
-			{delete_icon}
+			<UpdateButton addOrEditTask={props.addOrEditTask} task={task} setTaskFormMode={props.setTaskFormMode}></UpdateButton>
+			<DeleteButton deleteTask={props.deleteTask} id={task.id}></DeleteButton>
 		</td>
-		</tr >
+		</tr>
+}
+
+
+function UpdateButton(props){
+	return <span onClick={() => {props.setTaskFormMode("Update", props.task)}}>{update_icon}</span>
+}
+
+function DeleteButton(props){
+	return <span onClick={() => {props.deleteTask(props.id)}}>{delete_icon}</span>
 }
 
 export {TaskItem};

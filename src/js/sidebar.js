@@ -1,15 +1,14 @@
 import React from 'react';
 
 
-const filter_list = ["All", "Important", "Next 7 Days", "Private", "Shared With..."];
-const filter_data_id = ["filter-all", "filter-important", "filter-today", "filter-week", "filter-private", "filter-shared"];
+const filter_list = ["All", "Important", "Today", "Next 7 Days", "Private", "Shared With..."];
+const filter_data_id = ["all", "important", "today", "week", "private", "shared"];
 
 class Sidebar extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            projects: [...props.projects],
             active_type: "filter",
             active_id: 0
         }
@@ -32,7 +31,8 @@ class Sidebar extends React.Component {
             <div className="my-5">
                 <h6 className="border-bottom border-gray p-3 mb-0">Projects</h6>
                 <div className="list-group list-group-flush">
-                    {this.state.projects.map((project, index) => (<ProjectFilter key={index} index={index} projectFilter={project}
+                    {this.props.projects && 
+                    this.props.projects.map((project, index) => (<ProjectFilter key={index} index={index} projectFilter={project}
                         selected={this.state.active_type.localeCompare("project") === 0 && this.state.active_id === index} 
                         setActiveId={this.setActiveId} setActiveType={this.setActiveType} setFilter={this.props.setFilter}/>))}
                 </div>
@@ -43,12 +43,12 @@ class Sidebar extends React.Component {
 
 function Filter(props) {
     return <a href="#top" className={"list-group-item list-group-item-action " + (props.selected ? "active" : "")} data-id={props.filter}
-    onClick={()=>{props.setActiveId(props.index); props.setActiveType("filter"); props.setFilter(props.filter)}}>{props.filter}</a>
+    onClick={()=>{props.setActiveId(props.index); props.setActiveType("filter"); props.setFilter(props.filter, props.data_id)}}>{props.filter}</a>
 }
 
 function ProjectFilter(props) {
     return <a href="#top" className={"list-group-item list-group-item-action " + (props.selected ? "active" : "")} data-id={props.projectFilter}
-    onClick={()=>{props.setActiveId(props.index); props.setActiveType("project"); props.setFilter(props.projectFilter)}}>{props.projectFilter}</a>
+    onClick={()=>{props.setActiveId(props.index); props.setActiveType("project"); props.setFilter(props.projectFilter, props.projectFilter)}}>{props.projectFilter}</a>
 }
 
 
