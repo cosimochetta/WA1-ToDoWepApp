@@ -1,11 +1,13 @@
 import React from 'react';
-import { Navbar } from "./js/navbar.js"
+import Header from "./js/header.js"
 import { MainContent } from "./js/mainContent.js"
 import { Sidebar } from "./js/sidebar.js"
-import * as API from "./js/API.js"
 import { ModalTaskForm } from './js/taskForm.js';
+import * as API from "./js/API.js"
 import Task from './js/task.js';
-
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Button from 'react-bootstrap/Button'
 class App extends React.Component {
 
 	constructor(props) {
@@ -61,17 +63,17 @@ class App extends React.Component {
 	}
 
 	render() {
-		return <div className="App">
-			<Navbar></Navbar>
-			<div class="container-fluid">
-				<div class="row vheight-100">
+		return <>
+			<Header></Header>
+			<Container fluid>
+				<Row className="row vheight-100">
 					<Sidebar projects={this.state.projects} setFilter={this.setFilter}></Sidebar>
 					<MainContent taskList={this.state.taskList} filter={this.state.filter} deleteTask={this.deleteTask} addOrEditTask={this.addOrEditTask} setTaskFormMode={this.setTaskFormMode}></MainContent>
-					<button type="button" id="addButton" class="btn btn-lg btn-primary fixed-right-bottom" onClick={() => this.setTaskFormMode("Add", null)}>&#43;</button>
+					<Button size='lg' variant="primary" className='fixed-right-bottom' id="addButton"  onClick={() => this.setTaskFormMode("Add", null)}>&#43;</Button>
 					<ModalTaskForm taskFormMode={this.state.taskFormMode} setTaskFormMode={this.setTaskFormMode} addOrEditTask={this.addOrEditTask} task={this.state.currentTask}></ModalTaskForm>
-				</div>
-			</div>
-		</div>
+				</Row>
+			</Container>
+		</>
 	}
 }
 

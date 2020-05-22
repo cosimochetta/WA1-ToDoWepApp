@@ -1,7 +1,7 @@
 import moment from "moment"
 
 let fakeTask = [
-	{ id: 1, description: "Complete Lab 8", important: true, privateTask: true, deadline: moment('2020-05-17'), project: "WebApp I", completed: false },
+	{ id: 1, description: "Complete Lab 8", important: true, privateTask: true, deadline: moment('2020-05-17'), project: "WebApp I", completed: true },
 	{ id: 2, description: "Complete Lab 5", important: false, privateTask: true, deadline: moment('2020-05-19'), project: "FLC", completed: false },
 	{ id: 3, description: "Third delivery: testing", important: true, privateTask: false, deadline: moment('2020-05-18'), project: "Softeng", completed: false },
 	{ id: 4, description: "I'll follow the sun", important: false, privateTask: false, deadline: moment('2020-05-15'), project: "Guitar", completed: false },
