@@ -119,7 +119,7 @@ exports.deleteTask = function (id) {
             if (err)
                 reject(err);
             else
-                resolve(null);
+                resolve(true);
         })
     });
 }

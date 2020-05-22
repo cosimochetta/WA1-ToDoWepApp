@@ -42,7 +42,7 @@ class App extends React.Component {
 		if (task.id == null) {
 			task.id = Math.max(...this.state.taskList.map((t) => t.id)) + 1;
 		}
-		API.insertTask(Task.from(task)).then((newTask) => {
+		API.addTask(Task.from(task)).then((newTask) => {
 			this.setState((state) => {
 				let newTaskList = this.state.taskList.filter((t) => t.id !== task.id);
 				newTaskList.push(newTask);
@@ -52,14 +52,11 @@ class App extends React.Component {
 	};
 
 	deleteTask = (id) => {
-		API.deleteTask(id).then(async (result) => {
-			console.log("deleting....");
-			if (result) {
-				this.setState((state) => {
-					let newTaskList = this.state.taskList.filter((t) => t.id !== id);
-					return { taskList: [...newTaskList] }
-				})
-			}
+		API.deleteTask(id).then(async (response) => {
+			this.setState((state) => {
+				let newTaskList = this.state.taskList.filter((t) => t.id !== id);
+				return { taskList: [...newTaskList] }
+			})
 		})
 	}
 
