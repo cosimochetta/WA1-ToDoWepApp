@@ -8,8 +8,8 @@ function ModalTaskForm(props) {
 			<Modal.Title>{props.taskFormMode} Task</Modal.Title>
 		</Modal.Header>
 		<Modal.Body>
-			{props.taskFormMode !== "hidden" && 
-			<TaskForm taskFormMode={props.taskFormMode} setTaskFormMode={props.setTaskFormMode} addOrEditTask={props.addOrEditTask} task={props.task}></TaskForm>}
+			{props.taskFormMode !== "hidden" &&
+				<TaskForm taskFormMode={props.taskFormMode} setTaskFormMode={props.setTaskFormMode} addOrEditTask={props.addOrEditTask} task={props.task}></TaskForm>}
 		</Modal.Body>
 	</Modal>
 }
@@ -35,8 +35,14 @@ class TaskForm extends React.Component {
 
 	handleSubmit = (event) => {
 		event.preventDefault();
-		this.props.addOrEditTask(this.state);
-		this.props.setTaskFormMode("hidden");
+		const form = event.currentTarget;
+		if (!form.checkValidity()) {
+			form.reportValidity();
+		} else {
+			let task = Object.assign({}, this.state);
+			this.props.addOrEditTask(task);
+			this.props.setTaskFormMode("hidden");
+		}
 	}
 
 	updateField = (name, value) => {

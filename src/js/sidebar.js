@@ -1,5 +1,7 @@
 import React from 'react';
 import ListGroup from "react-bootstrap/ListGroup"
+import Col from "react-bootstrap/Col"
+import Collapse from 'react-bootstrap/Collapse'
 
 const filter_list = ["All", "Important", "Today", "Next 7 Days", "Private", "Shared With..."];
 const filter_filter_id
@@ -18,19 +20,21 @@ class Sidebar extends React.Component {
         this.setState({ active_id: id });
     }
     render() {
-        return <aside className="collapse d-sm-block col-sm-3 col-12 bg-light below-nav" id="left-sidebar">
-            <ListGroup defaultActiveKey="#all" variant="flush">
-                {filter_list.map((filter, index) => (<Filter key={index} index={index} filter={filter} filter_id={filter_filter_id[index]}
-                    setActiveId={this.setActiveId} setFilter={this.props.setFilter} />))}
+        return (
+            <Collapse in={this.props.openMobileMenu}>
+                <Col sm={3} bg="light" id="left-sidebar" className="collapse d-sm-block below-nav">
+                    <ListGroup defaultActiveKey="#all" variant="flush">
+                        {filter_list.map((filter, index) => (<Filter key={index} index={index} filter={filter} filter_id={filter_filter_id[index]}
+                            setActiveId={this.setActiveId} setFilter={this.props.setFilter} />))}
 
-                <h5 className="border-bottom border-gray p-3 mt-3">Projects</h5>
-                {this.props.projects &&
-                this.props.projects.map((project, index) => (<Filter key={index + filter_number} index={index + filter_number} filter={project} filter_id={project}
-                        setActiveId={this.setActiveId} setFilter={this.props.setFilter} />))}
-
-
-            </ListGroup>
-        </aside>
+                        <h5 className="border-bottom border-gray p-3 mt-3">Projects</h5>
+                        {this.props.projects &&
+                            this.props.projects.map((project, index) => (<Filter key={index + filter_number} index={index + filter_number} filter={project} filter_id={project}
+                                setActiveId={this.setActiveId} setFilter={this.props.setFilter} />))}
+                    </ListGroup>
+                </Col>
+            </Collapse>
+        )
     }
 }
 

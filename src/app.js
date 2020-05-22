@@ -17,7 +17,8 @@ class App extends React.Component {
 			project: [],
 			filter: "All",
 			taskFormMode: "hidden",
-			currentTask: null
+			currentTask: null,
+			openMobileMenu: false
 		};
 	}
 
@@ -34,7 +35,7 @@ class App extends React.Component {
 
 	setTaskFormMode = (mode, task) => {
 		this.setState({ taskFormMode: mode });
-		this.setState({currentTask: task});
+		this.setState({ currentTask: task });
 	}
 
 	addOrEditTask = (task) => {
@@ -62,14 +63,17 @@ class App extends React.Component {
 		})
 	}
 
+	showSidebar = () => {
+		this.setState((state) => ({ openMobileMenu: !state.openMobileMenu }));
+	}
 	render() {
 		return <>
-			<Header></Header>
+			<Header showSidebar={this.showSidebar}></Header>
 			<Container fluid>
 				<Row className="row vheight-100">
-					<Sidebar projects={this.state.projects} setFilter={this.setFilter}></Sidebar>
+					<Sidebar projects={this.state.projects} setFilter={this.setFilter} openMobileMenu={this.state.openMobileMenu}></Sidebar>
 					<MainContent taskList={this.state.taskList} filter={this.state.filter} deleteTask={this.deleteTask} addOrEditTask={this.addOrEditTask} setTaskFormMode={this.setTaskFormMode}></MainContent>
-					<Button size='lg' variant="primary" className='fixed-right-bottom' id="addButton"  onClick={() => this.setTaskFormMode("Add", null)}>&#43;</Button>
+					<Button size='lg' variant="primary" className='fixed-right-bottom' id="addButton" onClick={() => this.setTaskFormMode("Add", null)}>&#43;</Button>
 					<ModalTaskForm taskFormMode={this.state.taskFormMode} setTaskFormMode={this.setTaskFormMode} addOrEditTask={this.addOrEditTask} task={this.state.currentTask}></ModalTaskForm>
 				</Row>
 			</Container>

@@ -18,7 +18,7 @@ const user_icon = <svg class="bi bi-people-circle" width="30" height="30" viewBo
 function Header(props) {
   return (<>
     <Navbar bg="primary" variant="dark" expand="sm" fixed="top">
-      {/*<Navbar.Toggle aria-controls="left-sidebar" aria-expanded="false" aria-label="Toggle sidebar" onClick={props.showSidebar}/>*/}
+      <Navbar.Toggle aria-controls="left-sidebar" aria-expanded="false" aria-label="Toggle sidebar" onClick={props.showSidebar}/>
       <Navbar.Brand href="#">
         {check_icon}
       </Navbar.Brand>
