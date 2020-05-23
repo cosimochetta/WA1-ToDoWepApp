@@ -21,18 +21,19 @@ const TaskItem = (props) => {
 	return <tr id={"task" + task.id} class="w-100">
 		<th scope="row">
 			<div class="custom-control custom-checkbox">
-				<input type="checkbox" id={"check-t" + task.id} class={"custom-control-input " + (task.important ? "important" : "")} htmlFor={"check-t" + props.id} defaultChecked = {task.completed}></input>
+				<input type="checkbox" id={"check-t" + task.id} class={"custom-control-input " + (task.important ? "important" : "")} htmlFor={"check-t" + props.id} defaultChecked = {task.completed}
+				onClick={()=>{props.completedTask(props.task)}}></input>
 				<label class="description custom-control-label" htmlFor={"check-t" + task.id}>{task.description}</label>
 			</div>
 		</th>
 		<td><div class="badge badge-pill badge-primary align-middle">{task.project || null}</div></td>
 		<td>{task.privateTask ? null : shared_icon}</td>
-		<td>{task.deadline && (
+		<td>{task.deadline && task.deadline instanceof moment && (
 			<small class={"mx-auto date " + (task.deadline.isBefore(moment(), "day") ? "bg-danger text-white" : "")}>{task.deadline.format("YYYY/MM/DD")}</small>
 		)}
 		</td>
 		<td>
-			<UpdateButton addOrEditTask={props.addOrEditTask} task={task} setTaskFormMode={props.setTaskFormMode}></UpdateButton>
+			<UpdateButton task={task} setTaskFormMode={props.setTaskFormMode}></UpdateButton>
 			<DeleteButton deleteTask={props.deleteTask} id={task.id}></DeleteButton>
 		</td>
 	</tr>

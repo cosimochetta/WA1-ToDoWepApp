@@ -13,7 +13,7 @@ class TaskList extends React.Component {
         return <Table>
             <tbody>
                 {this.props.taskList.sort((a,b) => a.id-b.id).map((task) => (<TaskItem key={task.id} task={task} deleteTask={this.props.deleteTask}
-                 addOrEditTask={this.props.addOrEditTask} setTaskFormMode={this.props.setTaskFormMode} />))}
+                 completedTask={this.props.completedTask} setTaskFormMode={this.props.setTaskFormMode} />))}
             </tbody>
         </Table>
     }

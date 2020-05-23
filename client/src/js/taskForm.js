@@ -25,7 +25,8 @@ class TaskForm extends React.Component {
 				project: task.project,
 				important: task.important,
 				privateTask: task.privateTask,
-				deadline: task.deadline.format("YYYY/MM/DD")
+				deadline: (task.deadline != null) ? task.deadline.format("YYYY/MM/DD") : "",
+				completed: task.completed
 			};
 		}
 		else {

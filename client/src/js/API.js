@@ -26,7 +26,8 @@ async function addTask(task) {
             body: JSON.stringify(task),
         }).then( (response) => {
             if(response.ok) {
-                resolve(null);
+                response.json()
+                .then((data) => resolve(data));
             } else {
                 // analyze the cause of error
                 response.json()

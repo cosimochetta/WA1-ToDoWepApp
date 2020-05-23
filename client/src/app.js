@@ -40,17 +40,38 @@ class App extends React.Component {
 
 	addOrEditTask = (task) => {
 		if (task.id == null) {
-			task.id = Math.max(...this.state.taskList.map((t) => t.id)) + 1;
+			API.addTask(Task.from(task)).then((data) => {
+				if (data){
+					task.id = data.id;
+					this.setState((state) => {
+						let newTaskList = [...this.state.taskList];
+						newTaskList.push(task);
+						return { taskList: newTaskList };
+					})
+				}
+			});
 		}
-		API.addTask(Task.from(task)).then((newTask) => {
+		else {
+			API.updateTask(Task.from(task)).then(() => {
+				this.setState((state) => {
+					let newTaskList = this.state.taskList.filter((t) => t.id !== task.id);
+					newTaskList.push(Task.from(task));
+					return { taskList: [...newTaskList] };
+				})
+			});
+		}
+		
+	};
+	completedTask = (task) => {
+		task.completed = !task.completed;
+		API.updateTask(Task.from(task)).then(() => {
 			this.setState((state) => {
 				let newTaskList = this.state.taskList.filter((t) => t.id !== task.id);
-				newTaskList.push(newTask);
+				newTaskList.push(Task.from(task));
 				return { taskList: [...newTaskList] };
 			})
 		});
-	};
-
+	}
 	deleteTask = (id) => {
 		API.deleteTask(id).then(async (response) => {
 			this.setState((state) => {
@@ -69,7 +90,7 @@ class App extends React.Component {
 			<Container fluid>
 				<Row className="row vheight-100">
 					<Sidebar projects={this.state.projects} setFilter={this.setFilter} openMobileMenu={this.state.openMobileMenu}></Sidebar>
-					<MainContent taskList={this.state.taskList} filter={this.state.filter} deleteTask={this.deleteTask} addOrEditTask={this.addOrEditTask} setTaskFormMode={this.setTaskFormMode}></MainContent>
+					<MainContent taskList={this.state.taskList} filter={this.state.filter} deleteTask={this.deleteTask} completedTask={this.completedTask} setTaskFormMode={this.setTaskFormMode}></MainContent>
 					<Button size='lg' variant="primary" className='fixed-right-bottom' id="addButton" onClick={() => this.setTaskFormMode("Add", null)}>&#43;</Button>
 					<ModalTaskForm taskFormMode={this.state.taskFormMode} setTaskFormMode={this.setTaskFormMode} addOrEditTask={this.addOrEditTask} task={this.state.currentTask}></ModalTaskForm>
 				</Row>

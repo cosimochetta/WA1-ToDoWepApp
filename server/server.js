@@ -51,7 +51,7 @@ app.post(BASEURI+'/tasks', (req, res) => {
         res.status(400).end();
     } else {
         DAO.createTask(task)
-            .then((id) => res.status(201).json({ "id": id }))
+            .then((id) => {res.status(201).json({ "id": id })})
             .catch((err) => res.status(500).json({
                 errors: [{ 'param': 'Server', 'msg': err }],
             }));
