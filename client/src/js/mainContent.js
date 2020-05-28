@@ -1,8 +1,6 @@
-
 import React from 'react';
 import { TaskList } from "./taskList.js"
-
-
+import Col from "react-bootstrap/Col"
 
 class MainContent extends React.Component {
 	constructor(props) {
@@ -15,13 +13,12 @@ class MainContent extends React.Component {
 	}
 
 	render() {
-		return <main class="col-sm-9 col-12 below-nav" >
+		return <Col sm={9} className="below-nav" >
 			<h1 class="bg-primary text-white d-inline-block p-2 rounded-top">{this.props.filter}</h1>
 			<TaskList taskList={this.props.taskList} addTask={this.props.addTask} deleteTask={this.props.deleteTask} 
-			addOrEditTask={this.props.addOrEditTask} setTaskFormMode={this.props.setTaskFormMode}></TaskList>
-		</main>
+			completedTask={this.props.completedTask} setTaskFormMode={this.props.setTaskFormMode}></TaskList>
+		</Col>
 	}
 }
-
 
 export { MainContent };

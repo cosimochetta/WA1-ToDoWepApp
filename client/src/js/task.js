@@ -15,7 +15,6 @@ class Task{
             this.project = project;
 
         this.completed = completed || false;
-
     }
 
     /**
