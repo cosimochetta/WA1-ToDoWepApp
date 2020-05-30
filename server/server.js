@@ -39,7 +39,7 @@ app.post('/api/login', (req, res) => {
         }).catch(
             // Delay response when wrong user/pass is sent to avoid fast guessing attempts
             () => new Promise((resolve) => {
-                setTimeout(resolve, 1000)
+                setTimeout(resolve, 500)
             }).then(
                 () => res.status(401).end()
             )

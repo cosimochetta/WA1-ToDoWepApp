@@ -29,20 +29,24 @@ class App extends React.Component {
 		};
 	}
 
+	getProjects(taskList){
+		return [...new Set(taskList.map(task => task.project).filter(a => a != null))]
+	}
+
 	componentDidMount() {
 		API.getTasks().then((taskList) => this.setState({
 			taskList: [...taskList],
-			projects: [...new Set(taskList.map(task => task.project))]
+			projects: this.getProjects(taskList)
 		}));
 	}
 
 	setFilter = (filterName, filterId) => {
 		API.getTasks(filterId, this.state.csrfToken, this.state.id).then((taskList) => {
 			this.setState({ taskList: [...taskList], filter: filterName });
-			
-			if (filterName.localeCompare("All") === 0){
-				this.setState({ projects: [...new Set(taskList.map(task => task.project))] });
-			}	
+
+			if (filterName.localeCompare("All") === 0) {
+				this.setState({ projects: this.getProjects(taskList) });
+			}
 		});
 
 	}
@@ -55,7 +59,7 @@ class App extends React.Component {
 					this.setState((state) => {
 						let newTaskList = [...this.state.taskList];
 						newTaskList.push(task);
-						return { taskList: newTaskList };
+						return { taskList: newTaskList, projects: this.getProjects(newTaskList) };
 					})
 				}
 			});
@@ -65,7 +69,7 @@ class App extends React.Component {
 				this.setState((state) => {
 					let newTaskList = this.state.taskList.filter((t) => t.id !== task.id);
 					newTaskList.push(Task.from(task));
-					return { taskList: [...newTaskList] };
+					return { taskList: [...newTaskList], projects: this.getProjects(newTaskList) };
 				})
 			});
 		}
@@ -95,16 +99,19 @@ class App extends React.Component {
 	}
 
 	userLogin = (user, pass) => {
-		API.userLogin(user, pass).then(
-			(userObj) => {
-				console.log(userObj)
-				this.setState({ logged: true, user: userObj.name, id: userObj.id });
-				this.setFilter("All", "all");
-				API.getCSRFToken().then((response) => this.setState({ csrfToken: response.csrfToken }));
-			}
-		).catch(
-			() => { console.log("ERROR"); this.setState({ logged: false, user: '' }) }
-		);
+		return new Promise((resolve, reject) => {
+			API.userLogin(user, pass).then(
+				(userObj) => {
+					console.log(userObj)
+					this.setState({ logged: true, user: userObj.name, id: userObj.id });
+					this.setFilter("All", "all");
+					API.getCSRFToken().then((response) => this.setState({ csrfToken: response.csrfToken }));
+					resolve("done");
+				}
+			).catch(
+				() => { console.log("ERROR"); this.setState({ logged: false}); resolve(null)}
+			);
+		})
 	}
 
 	userLogout = () => {
