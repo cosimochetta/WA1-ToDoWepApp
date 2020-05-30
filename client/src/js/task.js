@@ -25,7 +25,7 @@ class Task{
     static from(json) {
         const t =  Object.assign(new Task(), json);
         if(t.deadline)
-            t.deadline = moment(t.deadline);
+            t.deadline = moment.utc(t.deadline);
         return t;
     }
 

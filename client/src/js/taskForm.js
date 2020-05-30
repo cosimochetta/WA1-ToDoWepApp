@@ -1,37 +1,32 @@
 import React from 'react';
 import { Modal, Form, Button } from 'react-bootstrap'
-
+import {Redirect, Link} from "react-router-dom"
 
 function ModalTaskForm(props) {
-	return <Modal show={props.taskFormMode !== "hidden"} onHide={() => props.setTaskFormMode("hidden")}>
-		<Modal.Header closeButton>
+	return <Modal show={props.show}>
+		<Modal.Header>
 			<Modal.Title>{props.taskFormMode} Task</Modal.Title>
 		</Modal.Header>
 		<Modal.Body>
-			{props.taskFormMode !== "hidden" &&
-				<TaskForm taskFormMode={props.taskFormMode} setTaskFormMode={props.setTaskFormMode} addOrEditTask={props.addOrEditTask} task={props.task}></TaskForm>}
+			{props.show &&
+				<TaskForm taskFormMode={props.taskFormMode} addOrEditTask={props.addOrEditTask} task={props.task}></TaskForm>}
 		</Modal.Body>
 	</Modal>
 }
 
-class TaskForm extends React.Component {
+class TaskForm extends React.Component {	
 	constructor(props) {
 		super(props);
 		let task = props.task;
-		if (props.task != null) {
-			this.state = {
-				id: task.id,
-				description: task.description,
-				project: task.project,
-				important: task.important,
-				privateTask: task.privateTask,
-				deadline: (task.deadline != null) ? task.deadline.format("YYYY/MM/DD") : "",
-				completed: task.completed
-			};
+		if (task != null) {
+			this.state = {...task};
+			this.state.deadline = (task.deadline != null) ? task.deadline.format("YYYY/MM/DD") : "";
 		}
 		else {
 			this.state = { id: null, description: "", project: "", important: false, privateTask: false, deadline: null };
 		}
+		this.state.submitted = false;
+		console.log(this.state)
 	}
 
 	handleSubmit = (event) => {
@@ -42,8 +37,8 @@ class TaskForm extends React.Component {
 		} else {
 			let task = Object.assign({}, this.state);
 			this.props.addOrEditTask(task);
-			this.props.setTaskFormMode("hidden");
 		}
+		this.setState((state) => ({submitted: true}));
 	}
 
 	updateField = (name, value) => {
@@ -53,6 +48,8 @@ class TaskForm extends React.Component {
 
 	render() {
 		let task = this.props.task;
+		if(this.state.submitted)
+			return <Redirect to="/"/>
 		return (
 			<Form onSubmit={this.handleSubmit}>
 				<Form.Group controlId="form_description">
@@ -80,9 +77,12 @@ class TaskForm extends React.Component {
 					<Form.Control type="date" defaultValue={(task != null && task.deadline != null) ? task.deadline.format("YYYY-MM-DD") : ""}
 						onChange={(ev) => this.updateField("deadline", ev.target.value)} />
 				</Form.Group>
-				<Button variant="primary" type="submit" className="float-right" onSubmit>
+				<div className="float-right">
+				<Link to="/"><Button variant="secondary" >Cancel</Button></Link>
+				<Button variant="primary" type="submit" className="mx-2" onSubmit>
 					{this.props.taskFormMode}
 				</Button>
+				</div>
 			</Form>
 		)
 	}
