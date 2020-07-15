@@ -63,10 +63,11 @@ app.use(csrfProtection);
 app.use(
     jwt({
       secret: jwtSecret,
+      algorithms: ['HS256'],
       getToken: req => req.cookies.token
     })
   );
-  
+
   // Provide an endpoint for the App to retrieve the CSRF token
   app.get('/api/csrf-token', csrfProtection, (req, res) => {
     res.json({ csrfToken: req.csrfToken() });
