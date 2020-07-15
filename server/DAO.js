@@ -1,5 +1,5 @@
 'use strict'
-
+const bcrypt = require('bcrypt');
 const Task = require('./task');
 const db = require('./db');
 const moment = require('moment');
@@ -12,7 +12,7 @@ const createTask = function (row) {
     const importantTask = (row.important === 1) ? true : false;
     const privateTask = (row.private === 1) ? true : false;
     const completedTask = (row.completed === 1) ? true : false;
-    return new Task(row.id, row.description, importantTask, privateTask, moment(row.deadline), row.project, completedTask);
+    return new Task(row.id, row.description, importantTask, privateTask, moment.utc(row.deadline), row.project, completedTask);
 }
 
 /**
@@ -20,6 +20,8 @@ const createTask = function (row) {
 * @param {*} date a Moment js date to be checked
 */
 const isToday = function (date) {
+    console.log(date)
+    console.log(moment())
     return date.isSame(moment(), 'day');
 }
 
@@ -36,10 +38,10 @@ const isNextWeek = function (date) {
 /**
  * Get tasks and optionally filter them
  */
-exports.getTasks = function (filter) {
-    return new Promise((resolve, reject) => {
-        const sql = "SELECT * FROM tasks";
-        db.all(sql, [], (err, rows) => {
+exports.getTasks = function (filter, userId) {
+        return new Promise((resolve, reject) => {
+        const sql = "SELECT * FROM tasks WHERE userId = ?";
+        db.all(sql, [userId], (err, rows) => {
             if (err) {
                 reject(err);
             } else {
@@ -76,6 +78,8 @@ exports.getTasks = function (filter) {
                                 else
                                     return false;
                             });
+                            break;
+                        case "all":
                             break;
                         default:
                             //try to filter by project
@@ -130,8 +134,8 @@ exports.deleteTask = function (id) {
  */
 exports.createTask = function (task) {
     return new Promise((resolve, reject) => {
-        const sql = 'INSERT INTO tasks(description, important, private, project, deadline, completed) VALUES(?,?,?,?,DATETIME(?),?)';
-        db.run(sql, [task.description, task.important, task.privateTask, task.project, task.deadline, task.completed], function (err) {
+        const sql = 'INSERT INTO tasks(description, important, private, project, deadline, completed, userId) VALUES(?,?,?,?,DATETIME(?),?,?)';
+        db.run(sql, [task.description, task.important, task.privateTask, task.project, task.deadline, task.completed, task.userId], function (err) {
             if (err) {
                 console.log(err);
                 reject(err);
@@ -160,3 +164,43 @@ exports.updateTask = function (id, newTask) {
         })
     });
 }
+
+
+/**
+ * Check if user - password is valid
+ */
+exports.checkUserPass = function (user, pass) {
+    return new Promise((resolve, reject) => {
+      const sql = 'SELECT id, name, email, hash FROM user WHERE name = ?';
+      // execute query and get all results into `rows`
+      db.all(sql, [user], (err, rows) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        if (rows.length === 0) {
+          reject(null);
+          return;
+        }
+        const passwordHashDb = rows[0].hash;
+        console.log(rows)
+        // bcrypt.compare might be computationally heavy, thus it call a callback function when completed
+        bcrypt.compare(pass, passwordHashDb, function (err, res) {
+          if (err)
+            reject(err);
+          else {
+            if (res) {
+              resolve({
+                id: rows[0].id,
+                name: rows[0].name,
+              });
+              return;
+            } else {
+              reject(null);
+              return;
+            }
+          }
+        });
+      });
+    });
+  }

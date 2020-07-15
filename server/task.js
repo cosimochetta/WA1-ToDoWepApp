@@ -1,13 +1,13 @@
 class Task {
 
-    constructor(id, description, important, privateTask, deadline, project, completed) {
+    constructor(id, description, important, privateTask, deadline, project, completed, userId) {
         if (id)
             this.id = id;
 
         this.description = description;
         this.important = important;
         this.privateTask = privateTask;
-
+        this.userId = userId;
         if (deadline)
             this.deadline = deadline;
         if (project)
