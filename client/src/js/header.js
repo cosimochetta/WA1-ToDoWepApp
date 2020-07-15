@@ -26,9 +26,11 @@ function Header(props) {
         {check_icon}
         {props.user !== "" && ("Welcome " + props.user + "!")}
       </Navbar.Brand>
+      {/*
       <Form inline className="my-2 my-lg-0 mx-auto d-none d-sm-block">
         <FormControl type="search" className="mr-sm-2" placeholder="Search" aria-label="Search query" />
       </Form>
+      */}
       <Nav className="ml-md-auto">
 
         {!props.logged &&

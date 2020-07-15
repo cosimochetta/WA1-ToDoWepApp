@@ -10,7 +10,8 @@ import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import { LoginModal } from "./js/login.js"
-
+import Alert from "react-bootstrap/Alert"
+import Col from "react-bootstrap/Col"
 
 class App extends React.Component {
 
@@ -29,7 +30,7 @@ class App extends React.Component {
 		};
 	}
 
-	getProjects(taskList){
+	getProjects(taskList) {
 		return [...new Set(taskList.map(task => task.project).filter(a => a != null))]
 	}
 
@@ -109,7 +110,7 @@ class App extends React.Component {
 					resolve("done");
 				}
 			).catch(
-				() => { console.log("ERROR"); this.setState({ logged: false}); resolve(null)}
+				() => { console.log("ERROR"); this.setState({ logged: false }); resolve(null) }
 			);
 		})
 	}
@@ -133,9 +134,30 @@ class App extends React.Component {
 				<Header showSidebar={this.showSidebar} logged={this.state.logged} user={this.state.user} userLogout={this.userLogout}></Header>
 				<Container fluid>
 					<Row className="row vheight-100">
-						<Sidebar projects={this.state.projects} setFilter={this.setFilter} openMobileMenu={this.state.openMobileMenu}></Sidebar>
-						<MainContent taskList={this.state.taskList} filter={this.state.filter} deleteTask={this.deleteTask} completedTask={this.completedTask}></MainContent>
-						<Link to="/add"><Button size='lg' variant="primary" className='fixed-right-bottom' id="addButton">&#43;</Button></Link>
+						{this.state.user !== "" && <>
+							<Sidebar projects={this.state.projects} setFilter={this.setFilter} openMobileMenu={this.state.openMobileMenu}></Sidebar>
+							<MainContent taskList={this.state.taskList} filter={this.state.filter} deleteTask={this.deleteTask} completedTask={this.completedTask}></MainContent>
+							<Link to="/add"><Button size='lg' variant="primary" className='fixed-right-bottom' id="addButton">&#43;</Button></Link>
+						</>}
+						{this.state.user === "" &&
+							<Col sm={9} className="below-nav" >
+								<Alert variant="success">
+									<Alert.Heading>Hey, nice to see you</Alert.Heading>
+									<p>
+										This web app allows you to save your to-dos list, modify the item and
+										share some of them with other user. Currently there is no option to
+										create a new account, you can login with (user1 - password) or
+										(user2 - password)
+  								</p>
+									<hr />
+									<p className="mb-0">
+										I've created this small web app during the master degree "Wep Application 1"
+										course of politecnico di Torino.
+  								</p>
+								</Alert>
+							</Col>
+
+						}
 						<Switch>
 							<Route path="/update/:id" render={({ match }) => {
 								let task = this.state.taskList.find((m) => (m.id === parseInt(match.params.id)));
